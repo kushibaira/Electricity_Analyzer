@@ -1,0 +1,102 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Electricity Analyzer</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+<header>
+    <h2>⚡ Electricity Analyzer</h2>
+    <nav>
+        <a href="/">Home</a>
+        <a href="/dashboard">Dashboard</a>
+        <a href="/prediction">Prediction</a>
+        <a href="/history">History</a>
+    </nav>
+</header>
+
+<main class="container">
+
+    <h1>Electricity Usage Dashboard</h1>
+    <p>Monitor your electricity consumption patterns.</p>
+
+    <div class="card">
+        <h2>Consumption Summary</h2>
+
+        <p>Average Consumption: <strong>{{ average }} kWh</strong></p>
+        <p>Highest Consumption: <strong>{{ highest }} kWh</strong></p>
+        <p>Lowest Consumption: <strong>{{ lowest }} kWh</strong></p>
+    </div>
+
+    <div class="card">
+        <h2>Daily Electricity Usage</h2>
+        <canvas id="dailyChart"></canvas>
+    </div>
+
+    <div class="card">
+        <h2>Monthly Electricity Usage</h2>
+        <canvas id="monthlyChart"></canvas>
+    </div>
+
+    <div class="card">
+        <h2>💰 Energy Cost Calculator</h2>
+
+        <p>Electricity Rate: ₹{{ electricity_rate }} per unit</p>
+        <p>Estimated Daily Cost: ₹{{ daily_cost }}</p>
+        <p>Estimated Monthly Cost: ₹{{ monthly_cost }}</p>
+        <p>Estimated Yearly Cost: ₹{{ yearly_cost }}</p>
+
+        <p>
+            Potential Monthly Savings (10% reduction):
+            <strong>₹{{ monthly_savings }}</strong>
+        </p>
+    </div>
+
+</main>
+
+<script>
+    const dailyLabels = {{ labels | tojson }};
+    const dailyValues = {{ values | tojson }};
+
+    const monthlyLabels = {{ monthly_labels | tojson }};
+    const monthlyValues = {{ monthly_values | tojson }};
+
+    new Chart(document.getElementById("dailyChart"), {
+        type: "line",
+        data: {
+            labels: dailyLabels,
+            datasets: [{
+                label: "Daily Consumption (kWh)",
+                data: dailyValues,
+                borderWidth: 2,
+                tension: 0.3
+            }]
+        },
+        options: {
+            responsive: true
+        }
+    });
+
+    new Chart(document.getElementById("monthlyChart"), {
+        type: "bar",
+        data: {
+            labels: monthlyLabels,
+            datasets: [{
+                label: "Monthly Consumption (kWh)",
+                data: monthlyValues,
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true
+        }
+    });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,124 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prediction - Electricity Analyzer</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body>
+
+<header>
+    <h2>⚡ Electricity Analyzer</h2>
+
+    <nav>
+        <a href="/">Home</a>
+        <a href="/dashboard">Dashboard</a>
+        <a href="/prediction">Prediction</a>
+        <a href="/history">History</a>
+    </nav>
+</header>
+
+<main class="container">
+
+    <h1>Electricity Consumption Prediction</h1>
+
+    <p>Enter the details below to estimate electricity usage.</p>
+
+    <form method="POST" class="prediction-form">
+
+        <label>Temperature (°C)</label>
+        <input
+            type="number"
+            name="temperature"
+            min="0"
+            max="60"
+            step="any"
+            required
+        >
+
+        <label>Number of People</label>
+        <input
+            type="number"
+            name="occupancy"
+            min="1"
+            max="20"
+            required
+        >
+
+        <label>Appliance Usage (hours)</label>
+        <input
+            type="number"
+            name="appliance_usage"
+            min="0"
+            max="24"
+            step="any"
+            required
+        >
+
+        <button type="submit" class="btn">
+            Predict Consumption
+        </button>
+
+    </form>
+
+    {% if error %}
+        <div class="card">
+            <h3>Error</h3>
+            <p>{{ error }}</p>
+        </div>
+    {% endif %}
+
+    {% if result is not none %}
+
+    <div class="card result">
+
+        <h2>⚡ Predicted Consumption</h2>
+
+        <h1>{{ result }} kWh</h1>
+
+        <hr>
+
+        <h2>Unusual Consumption Detection</h2>
+
+        {% if anomaly %}
+
+            <h3>{{ anomaly.status }}</h3>
+
+            <p>{{ anomaly.message }}</p>
+
+        {% else %}
+
+            <p>Detection information is unavailable.</p>
+
+        {% endif %}
+
+        <hr>
+
+        <h2>💡 Energy Saving Recommendations</h2>
+
+        {% if recommendations %}
+
+            <ul>
+                {% for item in recommendations %}
+                    <li>{{ item }}</li>
+                {% endfor %}
+            </ul>
+
+        {% else %}
+
+            <p>No recommendations available.</p>
+
+        {% endif %}
+
+    </div>
+
+    {% endif %}
+
+</main>
+
+</body>
+</html>

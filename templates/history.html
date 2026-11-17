@@ -1,0 +1,99 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>History - Electricity Analyzer</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body>
+
+    <!-- HEADER -->
+    <header>
+        <h2>⚡ Electricity Analyzer</h2>
+
+        <nav>
+            <a href="/">Home</a>
+            <a href="/dashboard">Dashboard</a>
+            <a href="/prediction">Prediction</a>
+            <a href="/history">History</a>
+        </nav>
+    </header>
+
+    <!-- MAIN CONTENT -->
+    <main class="container">
+
+        <h1>Electricity Usage History</h1>
+
+        <p>Your saved electricity prediction records.</p>
+
+        <div class="card">
+
+            <h2>Prediction Records</h2>
+
+            <!-- DOWNLOAD BUTTONS -->
+            <div class="download-buttons">
+
+                <a href="{{ url_for('download_csv') }}" class="btn">
+                    ⬇ Download CSV Report
+                </a>
+
+                <a href="{{ url_for('download_pdf') }}" class="btn">
+                    ⬇ Download PDF Report
+                </a>
+
+            </div>
+
+            <br>
+
+            <!-- HISTORY TABLE -->
+            <table>
+
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Date</th>
+                        <th>Temperature (°C)</th>
+                        <th>Occupancy</th>
+                        <th>Appliance Usage (hours)</th>
+                        <th>Predicted Consumption (kWh)</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    {% for record in records %}
+
+                    <tr>
+                        <td>{{ record.id }}</td>
+                        <td>{{ record.created_at }}</td>
+                        <td>{{ record.temperature }}</td>
+                        <td>{{ record.occupancy }}</td>
+                        <td>{{ record.appliance_usage }}</td>
+                        <td>{{ record.predicted_consumption }}</td>
+                    </tr>
+
+                    {% else %}
+
+                    <tr>
+                        <td colspan="6">
+                            No electricity records found.
+                        </td>
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </main>
+
+</body>
+</html>
